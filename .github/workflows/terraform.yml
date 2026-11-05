@@ -2,25 +2,25 @@
 name: terraform
 
 on:
-  # pull_request:
-  #   branches:
-  #     - master
+  pull_request:
+    branches:
+      - master
 
-  # push:
-  #   branches:
-  #     - master
+  push:
+    branches:
+      - master
 
-  workflow_dispatch:
-    inputs:
-      action:
-        type: choice
-        description: "Terraform action to perform"
-        options:
-          - plan
-          - apply
-          - destroy
-        default: apply
-        required: true
+  # workflow_dispatch:
+  #   inputs:
+  #     action:
+  #       type: choice
+  #       description: "Terraform action to perform"
+  #       options:
+  #         - plan
+  #         - apply
+  #         - destroy
+  #       default: apply
+  #       required: true
 
 env:
   AWS_REGION: ap-south-1
@@ -63,6 +63,6 @@ jobs:
         # if: inputs.action == 'apply' && github.ref == 'refs/heads/master'
         run: terraform apply --auto-approve
 
-      - name: Terraform Destroy
-        if: inputs.action == 'destroy' && github.ref == 'refs/heads/master'
-        run: terraform destroy -auto-approve -input=false
+      # - name: Terraform Destroy
+      #   if: inputs.action == 'destroy' && github.ref == 'refs/heads/master'
+      #   run: terraform destroy -auto-approve -input=false
