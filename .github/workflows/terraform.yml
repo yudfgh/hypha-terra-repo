@@ -60,9 +60,9 @@ jobs:
         run: terraform plan -input=false -out=tfplan
 
       - name: Terraform Apply
-        if: inputs.action == 'apply' && github.ref == 'refs/heads/main'
+        if: inputs.action == 'apply' && github.ref == 'refs/heads/master'
         run: terraform apply -input=false tfplan
 
       - name: Terraform Destroy
-        if: inputs.action == 'destroy' && github.ref == 'refs/heads/main'
+        if: inputs.action == 'destroy' && github.ref == 'refs/heads/master'
         run: terraform destroy -auto-approve -input=false
