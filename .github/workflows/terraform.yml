@@ -29,7 +29,7 @@ env:
 
 jobs:
   terraform:
-    runs-on: [self-hosted, linux, terraform]
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
