@@ -1,0 +1,68 @@
+
+name: terraform
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: "Terraform action to perform"
+        options:
+          - plan
+          - apply
+          - destroy
+        default: plan
+        required: true
+
+env:
+  AWS_REGION: ap-south-1
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  terraform:
+    runs-on: [self-hosted, linux, terraform]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: TFLint
+        run: tflint --recursive
+
+      - name: tfsec Security Scan
+        run: tfsec . --minimum-severity HIGH
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -out=tfplan
+
+      - name: Terraform Apply
+        if: inputs.action == 'apply' && github.ref == 'refs/heads/main'
+        run: terraform apply -input=false tfplan
+
+      - name: Terraform Destroy
+        if: inputs.action == 'destroy' && github.ref == 'refs/heads/main'
+        run: terraform destroy -auto-approve -input=false
