@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        type: multi-choice
+        type: choice
         description: "Terraform action to perform"
         options:
           - plan
