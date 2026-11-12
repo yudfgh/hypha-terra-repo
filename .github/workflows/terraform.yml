@@ -10,17 +10,17 @@ on:
     branches:
       - master
 
-  # workflow_dispatch:
-  #   inputs:
-  #     action:
-  #       type: choice
-  #       description: "Terraform action to perform"
-  #       options:
-  #         - plan
-  #         - apply
-  #         - destroy
-  #       default: apply
-  #       required: true
+  workflow_dispatch:
+    inputs:
+      action:
+        type: choice
+        description: "Terraform action to perform"
+        options:
+          - plan
+          - apply
+          - destroy
+        default: apply
+        required: true
 
 env:
   AWS_REGION: ap-south-1
